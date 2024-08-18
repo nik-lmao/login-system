@@ -7,8 +7,6 @@ function register(req, res) {
     const db = new sqlite3.Database("./database.db", (err) => {
         if (err) {
             console.error(err.message);
-        } else {
-            console.log("Connected to the database.");
         }
     });
 
@@ -66,7 +64,8 @@ function register(req, res) {
 
         res.status(200).json({
             success: true,
-            message: "User registered successfully"
+            message: "User registered successfully",
+            token: token
         });
     });
 }

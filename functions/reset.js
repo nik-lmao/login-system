@@ -3,7 +3,8 @@
 const sqlite3 = require("sqlite3").verbose();
 const crypto = require("crypto");
 
-function login(req, res) {
+
+function reset(req, res){
 
     const db = new sqlite3.Database("./database.db", (err) => {
         if (err) {
@@ -59,9 +60,23 @@ function login(req, res) {
             return;
         }
 
-        // Response
+        // New token
 
-        const token = row.token;
+        const token = crypto.randomBytes(16).toString("hex");
+
+        // Update the token
+
+        db.run("UPDATE users SET token = ? WHERE username = ?", [token, username], (err) => {
+            if(err) {
+                res.status(500).json({
+                    success: false,
+                    error: "Internal server error"
+                });
+                return;
+            }
+        });
+
+        // Response
 
         res.status(200).json({
             success: true,
@@ -71,6 +86,7 @@ function login(req, res) {
     });
         
     res.send("You would've logged in");
+
 }
 
-module.exports = login;
+module.exports = reset;

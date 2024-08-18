@@ -7,6 +7,7 @@ app.use(express.json());
 
 const register = require("./functions/register");
 const login = require("./functions/login");
+const reset = require("./functions/reset");
 
 // API Endpoints
 
@@ -21,6 +22,10 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     login(req, res);
+});
+
+app.post("/reset", (req, res) => {
+    reset(req, res);
 });
 
 
