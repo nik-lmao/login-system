@@ -1,20 +1,22 @@
-
 const crypto = require("crypto");
 const sqlite3 = require("sqlite3").verbose();
-
 
 function register(req, res) {
     const db = new sqlite3.Database("./database.db", (err) => {
         if (err) {
             console.error(err.message);
+            res.status(500).json({
+                success: false,
+                error: "Internal server error"
+            });
+            return;
         }
     });
 
     const { username, password, name } = req.body;
 
     // Request checks
-
-    if(!username || !password || !name) {
+    if (!username || !password || !name) {
         res.status(400).json({
             success: false,
             error: "Please provide all required arguments"
@@ -23,9 +25,8 @@ function register(req, res) {
     }
 
     // Database checks
-
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
-        if(err) {
+        if (err) {
             res.status(500).json({
                 success: false,
                 error: "Internal server error"
@@ -33,39 +34,36 @@ function register(req, res) {
             return;
         }
 
-        if(row) {
+        if (row) {
             res.status(409).json({
                 success: false,
                 error: "Username already exists"
             });
             return;
         }
-    });
 
-    // Hashing
+        // Hashing
+        const hash = crypto.createHash("sha256");
+        const salt = crypto.randomBytes(16).toString("hex");
+        hash.update(password + salt);
+        const hashedPassword = hash.digest("hex");
 
-    const hash = crypto.createHash("sha256");
-    const salt = crypto.randomBytes(16).toString("hex");
-    hash.update(password + salt);
-    const hashedPassword = hash.digest("hex");
+        const token = crypto.randomBytes(16).toString("hex");
 
-    const token = crypto.randomBytes(16).toString("hex");
+        // Insert into the database
+        db.run("INSERT INTO users (username, password, salt, token, name) VALUES (?, ?, ?, ?, ?)", [username, hashedPassword, salt, token, name], (err) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    error: "Internal server error"
+                });
+                return;
+            }
 
-    // Insert into the database
-
-    db.run("INSERT INTO users (username, password, salt, token, name) VALUES (?, ?, ?, ?, ?)", [username, hashedPassword, salt, token, name,], (err) => {
-        if(err) {
-            res.status(500).json({
-                success: false,
-                error: "Internal server error"
+            res.status(200).json({
+                success: true,
+                token: token
             });
-            return;
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "User registered successfully",
-            token: token
         });
     });
 }

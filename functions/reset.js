@@ -84,9 +84,6 @@ function reset(req, res){
         });
 
     });
-        
-    res.send("You would've logged in");
-
 }
 
 module.exports = reset;

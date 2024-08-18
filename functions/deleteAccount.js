@@ -1,16 +1,15 @@
 
 
 const sqlite3 = require("sqlite3").verbose();
-const crypto = require("crypto");
 
-function login(req, res) {
+function deleteAccount(req, res){
 
     const db = new sqlite3.Database("./database.db", (err) => {
         if (err) {
             console.error(err.message);
         }
     });
-
+    
     const { username, password } = req.body;
 
     // Request checks
@@ -23,7 +22,7 @@ function login(req, res) {
         return;
     }
 
-    // Database checks
+    // Database checkss
 
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
         if(err){
@@ -59,16 +58,24 @@ function login(req, res) {
             return;
         }
 
-        // Response
+        // Delete the user
 
-        const token = row.token;
+        db.run("DELETE FROM users WHERE username = ?", [username], (err) => {
+            if(err) {
+                res.status(500).json({
+                    success: false,
+                    error: "Internal server error"
+                });
+                return;
+            }
 
-        res.status(200).json({
-            success: true,
-            token: token
+            res.json({
+                success: true,
+            });
         });
 
     });
+
 }
 
-module.exports = login;
+module.exports = deleteAccount;
