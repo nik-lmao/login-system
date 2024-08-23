@@ -1,32 +1,30 @@
-# 👥 | Login System
+# 🔐 | Login System API
 
-<<<<<<< HEAD
-This project is a fully working login system API built with ExpressJS. You can create an account, login, reset the session token and delete the account.
+This project is a fully functional login system API built with ExpressJS. It allows users to create an account, log in, reset their session token, and delete their account.
 
-## 💾 | Installation
+## ⚙️ | Installation
 
-To install this project, just download the entire project folder, install all required modules with npm and after type `node .` to run the API.
+To set up this project, follow these steps:
+
+1. **Download Files:**
+   Download all files from the main folder and the `functions/` subfolder, including the function files.
+
+2. **Install Dependencies:**
+   Navigate to the project folder in your terminal and run `npm install sqlite3 express` to install the required npm libraries.
+
+3. **Run the Server:**
+   Start the server by running `node .` in the project folder.
+
+## 🖼️ | Screenshot
+
+Screenshot of an API request being sent (registration endpoint):
 
 <br>
 
-There is no front-end available to this app.
-=======
-## 💾 | Installation
-
-To install this project, just download the entire project folder. For the API, install all required modules with npm and run it by typing `node .`.
-
-<br>
-
-There's currently no website, only the API.
->>>>>>> 3340bf382c124aa49b80fd13cb0364f8a3483012
-
+![Screenshot](screenshot.png)
 
 ## ✉️ | Questions
 
-If you have any questions you can contact me on Discord: @nikitafrfr
+If you have any questions, you can contact me on Discord: @nikitafrfr.
 
-<<<<<<< HEAD
-If you came here from the Hackclub Slack, you can just contact me there :)
-=======
-If you came here from the Hackclub Slack, you can just contact me there :)
->>>>>>> 3340bf382c124aa49b80fd13cb0364f8a3483012
+If you came here from the Hackclub Slack, you can reach out to me there as well :)
